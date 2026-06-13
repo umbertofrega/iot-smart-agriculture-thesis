@@ -1,8 +1,8 @@
 #include <Arduino.h>
-#include "network_manager.h"
+#include "wifi_manager.h"
 #include "mqtt_manager.h"
 
-NetworkManager networkManager;
+WifiManager wifiManager;
 MqttManager mqttManager;
 
 void setup()
@@ -12,23 +12,28 @@ void setup()
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_RED, OUTPUT);
-
-  if (networkManager.connectToWifi())
-  {
-    digitalWrite(LED_GREEN, LOW);
-  }
-
-  if (mqttManager.connectToBroker())
-  {
-    digitalWrite(LED_BLUE, LOW);
-  }
 }
 
 void loop()
 {
-  if (!networkManager.isConnected())
+  mantainConnections();
+  mqttManager.loop();
+}
+
+void mantainConnections()
+{
+  if (!wifiManager.isConnected())
   {
     digitalWrite(LED_GREEN, HIGH);
+
+    if (wifiManager.connectToWifi())
+    {
+      digitalWrite(LED_GREEN, LOW);
+    }
+    else
+    {
+      return;
+    }
   }
 
   if (!mqttManager.isConnected())
@@ -40,6 +45,4 @@ void loop()
       digitalWrite(LED_BLUE, LOW);
     }
   }
-
-  mqttManager.loop();
 }
