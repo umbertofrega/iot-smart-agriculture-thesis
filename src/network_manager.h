@@ -1,9 +1,9 @@
 #include <WiFi.h>
-#include <secrets.h>
+#include "secrets.h"
 
 class NetworkManager{
     public:
-        boolean connectToWifi(){
+        bool connectToWifi(){
             int tries = 20;
 
             WiFi.begin(ssid,passwd);
@@ -15,16 +15,15 @@ class NetworkManager{
             }
             
             if(WiFi.status() == WL_CONNECTED){
-                Serial.print("Connection successful!");
+                Serial.println("Connection successful!");
                 return true;
             } else {
-                Serial.print("Connection failed");
+                Serial.println("Connection failed");
                 return false;
             }
         }
 
-        boolean isConnected(){
-            return WiFi.status() != WL_CONNECTED;
+        bool isConnected(){
+            return WiFi.status() == WL_CONNECTED;
         }
-
 };
