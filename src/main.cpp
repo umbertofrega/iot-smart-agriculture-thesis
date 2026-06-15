@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include <esp_sleep.h>
 #include "network/network_manager.h"
+#include "sensors/sensors_manager.h"
 
 NetworkManager networkManager;
+SensorsManager sensorsManager;
 
 void setup()
 {
@@ -14,16 +16,20 @@ void setup()
 
   esp_sleep_enable_timer_wakeup(30 * 1000000ULL);
 
-  wake_up_operations();
+  onWakeUp();
 
   esp_deep_sleep_start();
 }
 
-void wake_up_operations()
+void onWakeUp()
 {
+  char *data = sensorsManager.getData();
+
   networkManager.connect();
 
-    networkManager.disconnect();
+  networkManager.publishSensors(data);
+
+  networkManager.disconnect();
 }
 
 void loop() {}
