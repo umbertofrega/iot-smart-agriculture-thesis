@@ -1,12 +1,10 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include "secrets.h"
 
 class MqttManager
 {
 private:
-    const char *mqtt_broker = "192.168.1.102";
-    const int mqtt_port = 1883;
-
     WiFiClient wifiClient;
     PubSubClient mqttClient;
 
