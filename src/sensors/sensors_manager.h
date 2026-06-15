@@ -3,5 +3,5 @@
 class SensorsManager
 {
 public:
-    char *getData();
+    float *getData();
 };
