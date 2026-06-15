@@ -33,4 +33,9 @@ public:
     {
         return WiFi.status() == WL_CONNECTED;
     }
+
+    void disconnect()
+    {
+        WiFi.disconnect();
+    }
 };

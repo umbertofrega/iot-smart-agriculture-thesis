@@ -8,7 +8,7 @@ private:
     MqttManager mqttManager;
 
 public:
-    void mantainConnections()
+    void connect()
     {
         if (!wifiManager.isConnected())
         {
@@ -37,5 +37,11 @@ public:
         {
             mqttManager.loop();
         }
+    }
+
+    void disconnect()
+    {
+        mqttManager.disconnect();
+        wifiManager.disconnect();
     }
 };

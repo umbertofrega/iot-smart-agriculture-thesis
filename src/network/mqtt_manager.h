@@ -1,6 +1,5 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
-#include "secrets.h"
 
 class MqttManager
 {
@@ -33,6 +32,11 @@ public:
     void loop()
     {
         mqttClient.loop();
+    }
+
+    void disconnect()
+    {
+        mqttClient.disconnect();
     }
 
     bool isConnected()
