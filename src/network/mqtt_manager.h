@@ -43,4 +43,9 @@ public:
     {
         return mqttClient.connected();
     }
+
+    void publish(char *data)
+    {
+        mqttClient.publish("esp32/updates", data);
+    }
 };

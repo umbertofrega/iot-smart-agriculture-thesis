@@ -44,4 +44,10 @@ public:
         mqttManager.disconnect();
         wifiManager.disconnect();
     }
+
+    void publishSensors(char *data)
+    {
+
+        mqttManager.publish(data);
+    }
 };
