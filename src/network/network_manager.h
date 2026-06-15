@@ -8,34 +8,32 @@ private:
     MqttManager mqttManager;
 
 public:
-    void connect()
+    boolean connect()
     {
         if (!wifiManager.isConnected())
         {
-            digitalWrite(LED_GREEN, HIGH);
+            digitalWrite(LED_BLUE, HIGH);
 
             if (wifiManager.connectToWifi())
             {
-                digitalWrite(LED_GREEN, LOW);
+                digitalWrite(LED_BLUE, LOW);
             }
             else
             {
-                return;
+                return false;
             }
         }
 
-        if (!mqttManager.isConnected())
+        if (mqttManager.connectToBroker())
         {
             digitalWrite(LED_BLUE, HIGH);
-            if (mqttManager.connectToBroker())
-
-            {
-                digitalWrite(LED_BLUE, LOW);
-            }
+            digitalWrite(LED_GREEN, LOW);
+            mqttManager.loop();
+            return true;
         }
         else
         {
-            mqttManager.loop();
+            return false;
         }
     }
 
