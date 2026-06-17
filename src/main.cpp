@@ -1,10 +1,24 @@
 #include <Arduino.h>
 #include <esp_sleep.h>
 #include "network/network_manager.h"
-#include "sensors/sensors_manager.h"
 
 NetworkManager networkManager;
-SensorsManager sensorsManager;
+
+void onWakeUp()
+{
+  // char *data = sensorsManager.getData();
+
+  if (networkManager.connect())
+  {
+    // networkManager.publishSensors(data);
+
+    networkManager.disconnect();
+  }
+  else
+  {
+    Serial.println("Error in connection, resuming deep sleep");
+  }
+}
 
 void setup()
 {
@@ -14,22 +28,13 @@ void setup()
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_RED, OUTPUT);
 
-  esp_sleep_enable_timer_wakeup(30 * 1000000ULL);
+  // esp_sleep_enable_timer_wakeup(30 * 1000000ULL);
 
   onWakeUp();
 
-  esp_deep_sleep_start();
+  // esp_deep_sleep_start();
 }
 
-void onWakeUp()
+void loop()
 {
-  char *data = sensorsManager.getData();
-
-  networkManager.connect();
-
-  networkManager.publishSensors(data);
-
-  networkManager.disconnect();
 }
-
-void loop() {}
