@@ -7,7 +7,7 @@ private:
     TemperatureSensor temperatureSensor{PIN_DAC1};
 
 public:
-    float *getData()
+    float getData()
     {
         float temperature = temperatureSensor.readData();
         Serial.println("The temperature is: ");
