@@ -3,30 +3,41 @@
 #include "network/network_manager.h"
 #include "sensors/sensors_manager.h"
 #include "actuators/mixer_manager.h"
+#include <ArduinoJson.h>
 
 NetworkManager networkManager;
 SensorsManager sensorsManager;
-MixersManager mixersManager;
+// MixersManager mixersManager;
 
 void onWakeUp()
 {
   float pH = sensorsManager.getData();
+  JsonDocument data;
 
+  data["pH"] = pH;
   if (pH > 7.5f)
   {
-    mixersManager.mixBasic();
+    // mixersManager.mixBasic();
+    data["BasicMixer"] = "ON";
   }
   else if (pH < 4)
   {
-    mixersManager.mixAcidic();
+    // mixersManager.mixAcidic();
+    data["AcidicMixer"] = "ON";
   }
 
+  char buffer[256];
+
+  serializeJson(data, buffer);
+
+  serializeJsonPretty(data, Serial);
   if (networkManager.connect())
   {
-    networkManager.publishSensors(data);
+    networkManager.publishSensors(buffer);
 
     networkManager.disconnect();
   }
+
   else
   {
     Serial.println("Error in connection, resuming deep sleep");

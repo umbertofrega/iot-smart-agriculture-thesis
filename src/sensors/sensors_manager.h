@@ -9,8 +9,9 @@ private:
 public:
     float getData()
     {
-        float temperature = temperatureSensor.readData();
+        float temperature = 8;
         Serial.println("The temperature is: ");
         Serial.println(temperature);
+        return temperature;
     }
 };
