@@ -1,16 +1,29 @@
 #include <Arduino.h>
 #include <esp_sleep.h>
 #include "network/network_manager.h"
+#include "sensors/sensors_manager.h"
+#include "actuators/mixer_manager.h"
 
 NetworkManager networkManager;
+SensorsManager sensorsManager;
+MixersManager mixersManager;
 
 void onWakeUp()
 {
-  // char *data = sensorsManager.getData();
+  float pH = sensorsManager.getData();
+
+  if (pH > 7.5f)
+  {
+    mixersManager.mixBasic();
+  }
+  else if (pH < 4)
+  {
+    mixersManager.mixAcidic();
+  }
 
   if (networkManager.connect())
   {
-    // networkManager.publishSensors(data);
+    networkManager.publishSensors(data);
 
     networkManager.disconnect();
   }
