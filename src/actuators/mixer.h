@@ -15,7 +15,9 @@ public:
     void mix()
     {
         digitalWrite(pinNumber, HIGH);
+        
         delay(10000);
+
         digitalWrite(pinNumber, LOW);
     };
 };
