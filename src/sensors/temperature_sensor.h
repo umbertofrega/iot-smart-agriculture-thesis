@@ -1,37 +1,24 @@
 #include "sensor.h"
-#include <DHT.h>
 #include <Arduino.h>
-
-#define DHTTYPE DHT22
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 class TemperatureSensor : public Sensor
 {
 private:
-    int pin;
-    unsigned long time;
-    DHT dht;
+    OneWire oneWire;
+    DallasTemperature sensor;
 
-public:
-    TemperatureSensor(int digitalPin) : dht(digitalPin, DHT22)
+    TemperatureSensor(int pin) : oneWire(pin)
     {
-        pin = digitalPin;
-        dht.begin();
-        time = millis();
+        sensor = DallasTemperature(&oneWire);
+        sensor.begin();
     }
 
-    float readData() override
+public:
+    float getTemperature()
     {
-        unsigned long elapsed = (millis() - time);
-
-        if (elapsed <= 2000)
-            delay(2000 - elapsed);
-
-        float temperature = dht.readTemperature();
-
-        if (!isnan(temperature))
-        {
-            return temperature;
-        }
-        return -99;
+        sensor.requestTemperatures();
+        return sensor.getTempCByIndex(0);
     }
 };
