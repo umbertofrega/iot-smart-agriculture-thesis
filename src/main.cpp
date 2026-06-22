@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <esp_sleep.h>
+#include <ArduinoJson.h>
 #include "network/network_manager.h"
 #include "sensors/sensors_manager.h"
 #include "actuators/mixer_manager.h"
-#include <ArduinoJson.h>
 
 NetworkManager networkManager;
 SensorsManager sensorsManager;
@@ -11,16 +11,19 @@ SensorsManager sensorsManager;
 
 void onWakeUp()
 {
-  float pH = sensorsManager.getData();
+  float pH = sensorsManager.getPh();
+  float temp = sensorsManager.getTemp();
   JsonDocument data;
 
   data["pH"] = pH;
-  if (pH > 7.5f)
+  data["Temperature"] = temp;
+
+  if (pH > 7)
   {
     // mixersManager.mixBasic();
     data["BasicMixer"] = "ON";
   }
-  else if (pH < 4)
+  else if (pH < 5.5)
   {
     // mixersManager.mixAcidic();
     data["AcidicMixer"] = "ON";
