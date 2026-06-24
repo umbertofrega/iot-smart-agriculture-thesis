@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "sensor.h"
 
-class MoistureSensor : public Sensor
+class MoistureSensor
 {
 private:
     int pin;
