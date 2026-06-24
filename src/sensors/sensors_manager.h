@@ -5,16 +5,14 @@
 class SensorsManager
 {
 private:
-    float temperature;
+    TemperatureSensor temperatureSensor;
+    PhSensor PhSensor;
+    MoistureSensor moistureSensor;
 
 public:
-    SensorsManager()
-    {
-    }
-
     float getTemp()
     {
-        return 0;
+        return temperatureSensor.getTemperature();
     }
 
     float getPh()
@@ -24,6 +22,6 @@ public:
 
     float getHumidity()
     {
-        return 0;
+        return moistureSensor.getHumidity();
     }
 };

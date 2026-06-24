@@ -3,13 +3,13 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-class TemperatureSensor : public Sensor
+class TemperatureSensor
 {
 private:
     OneWire oneWire;
     DallasTemperature sensor;
 
-    TemperatureSensor(int pin) : oneWire(pin)
+    TemperatureSensor() : oneWire(A0)
     {
         sensor = DallasTemperature(&oneWire);
         sensor.begin();

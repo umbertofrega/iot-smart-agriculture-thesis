@@ -3,12 +3,9 @@
 
 class MoistureSensor
 {
-private:
-    int pin;
-
 public:
-    float readData()
+    float getHumidity()
     {
-        return analogRead(pin);
+        return analogRead(A1);
     }
 };
