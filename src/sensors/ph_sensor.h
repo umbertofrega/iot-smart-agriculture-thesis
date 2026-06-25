@@ -5,24 +5,22 @@
 class PhSensor
 {
 private:
-    int temperature;
     DFRobot_ESP_PH_WITH_ADC ph;
     int pin = GPIO_NUM_12;
 
 public:
-    PhSensor(int temp)
+    PhSensor()
     {
         EEPROM.begin(32);
-        temperature = temp;
     }
 
-    void calibrate()
+    void calibrate(int temperature)
     {
         float voltage = analogRead(pin) / 4095.0 * 3300.0;
         return ph.calibration(temperature, voltage);
     }
 
-    float getPh()
+    float getPh(int temperature)
     {
         float voltage = analogRead(pin) / 4095.0 * 3300.0;
         float phValue = ph.readPH(voltage, temperature);

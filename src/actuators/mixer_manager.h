@@ -8,9 +8,10 @@ private:
     Mixer basicMixer;
 
 public:
-    MixersManager(int pinAcidic, int pinBasic) : acidicMixer(pinAcidic),
-                                                 basicMixer(pinBasic)
+    MixersManager(int pinAcidic, int pinBasic)
     {
+        acidicMixer = Mixer(pinAcidic);
+        basicMixer = Mixer(pinBasic);
     }
 
     void mixBasic()
