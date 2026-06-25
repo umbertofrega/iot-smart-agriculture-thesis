@@ -16,10 +16,12 @@ public:
     void mixBasic()
     {
         basicMixer.mix();
+        Serial.println("Mixed basic");
     }
 
     void mixAcidic()
     {
         acidicMixer.mix();
+        Serial.println("Mixed acidic");
     }
 };
