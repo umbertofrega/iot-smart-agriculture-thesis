@@ -16,7 +16,13 @@ public:
         temperature = temp;
     }
 
-    float readPh()
+    void calibrate()
+    {
+        float voltage = analogRead(pin) / 4095.0 * 3300.0;
+        return ph.calibration(temperature, voltage);
+    }
+
+    float getPh()
     {
         float voltage = analogRead(pin) / 4095.0 * 3300.0;
         float phValue = ph.readPH(voltage, temperature);
