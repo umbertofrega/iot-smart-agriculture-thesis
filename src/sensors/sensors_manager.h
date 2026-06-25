@@ -15,9 +15,9 @@ public:
         return temperatureSensor.getTemperature();
     }
 
-    float getPh()
+    float getPh(int temp)
     {
-        return phSensor.getPh();
+        return phSensor.getPh(temp);
     }
 
     float getHumidity()

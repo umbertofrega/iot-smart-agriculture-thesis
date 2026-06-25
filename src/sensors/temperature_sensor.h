@@ -1,4 +1,3 @@
-#include "sensor.h"
 #include <Arduino.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -9,13 +8,13 @@ private:
     OneWire oneWire;
     DallasTemperature sensor;
 
+public:
     TemperatureSensor() : oneWire(A0)
     {
         sensor = DallasTemperature(&oneWire);
         sensor.begin();
     }
 
-public:
     float getTemperature()
     {
         sensor.requestTemperatures();
