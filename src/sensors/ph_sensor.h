@@ -5,7 +5,6 @@
 class PhSensor
 {
 private:
-    int temperature;
     DFRobot_ESP_PH_WITH_ADC ph;
     int pin = A2;
 
@@ -13,7 +12,10 @@ public:
     PhSensor()
     {
         EEPROM.begin(32);
+<<<<<<< HEAD
         ph.begin();
+=======
+>>>>>>> fb719b0dae666259cb2b23a8b919f978895e9579
     }
 
     void calibrate(int temperature)

@@ -6,6 +6,10 @@ private:
     int pinNumber;
 
 public:
+    Mixer()
+    {
+    }
+
     Mixer(int pin)
     {
         pinMode(pin, OUTPUT);
