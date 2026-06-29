@@ -9,13 +9,17 @@ private:
     OneWire oneWire;
     DallasTemperature sensor;
 
-    TemperatureSensor() : oneWire(A0)
+public:
+    TemperatureSensor() : oneWire(D3)
     {
         sensor = DallasTemperature(&oneWire);
+    }
+
+    void begin()
+    {
         sensor.begin();
     }
 
-public:
     float getTemperature()
     {
         sensor.requestTemperatures();

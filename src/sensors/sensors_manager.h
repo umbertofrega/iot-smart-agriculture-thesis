@@ -10,18 +10,23 @@ private:
     MoistureSensor moistureSensor;
 
 public:
+    void begin()
+    {
+        temperatureSensor.begin();
+    }
+
     float getTemp()
     {
         return temperatureSensor.getTemperature();
     }
 
-    float getPh()
+    float getPh(int temperature)
     {
-        return phSensor.getPh();
+        return phSensor.getPh(temperature);
     }
 
-    float getHumidity()
+    int getHumidityPercentage()
     {
-        return moistureSensor.getHumidity();
+        return moistureSensor.getHumidityPercentage();
     }
 };

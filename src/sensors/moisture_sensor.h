@@ -4,8 +4,8 @@
 class MoistureSensor
 {
 public:
-    float getHumidity()
+    int getHumidityPercentage()
     {
-        return analogRead(A1);
+        return map(analogRead(A1), 3100, 1940, 0, 100);
     }
 };
