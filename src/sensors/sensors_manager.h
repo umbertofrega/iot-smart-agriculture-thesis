@@ -20,15 +20,9 @@ public:
         return temperatureSensor.getTemperature();
     }
 
-<<<<<<< HEAD
-    float getPh(int temperature)
-    {
-        return phSensor.getPh(temperature);
-=======
     float getPh(int temp)
     {
         return phSensor.getPh(temp);
->>>>>>> fb719b0dae666259cb2b23a8b919f978895e9579
     }
 
     int getHumidityPercentage()

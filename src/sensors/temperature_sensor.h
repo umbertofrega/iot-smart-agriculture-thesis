@@ -9,11 +9,7 @@ private:
     DallasTemperature sensor;
 
 public:
-<<<<<<< HEAD
     TemperatureSensor() : oneWire(D3)
-=======
-    TemperatureSensor() : oneWire(A0)
->>>>>>> fb719b0dae666259cb2b23a8b919f978895e9579
     {
         sensor = DallasTemperature(&oneWire);
     }
