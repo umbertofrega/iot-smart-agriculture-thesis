@@ -10,11 +10,6 @@ private:
     MoistureSensor moistureSensor;
 
 public:
-    void begin()
-    {
-        temperatureSensor.begin();
-    }
-
     float getTemp()
     {
         return temperatureSensor.getTemperature();
