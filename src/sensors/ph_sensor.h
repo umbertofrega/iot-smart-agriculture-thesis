@@ -11,21 +11,18 @@ private:
 public:
     PhSensor()
     {
-        EEPROM.begin(32);
-        ph.begin();
     }
 
-    void calibrate(int temperature)
+    void begin()
     {
-        float voltage = analogRead(pin) / 4095.0 * 3300.0;
-
-        ph.calibration(temperature, voltage * 1.75);
+        EEPROM.begin(32);
+        ph.begin();
     }
 
     float getPh(int temperature)
     {
         float voltage = analogRead(pin) / 4095.0 * 3300.0;
-        float phValue = ph.readPH(voltage * 2, temperature);
+        float phValue = ph.readPH(voltage, temperature);
         return phValue;
     }
 };

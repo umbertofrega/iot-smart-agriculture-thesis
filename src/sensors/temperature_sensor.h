@@ -11,6 +11,10 @@ private:
 public:
     TemperatureSensor() : oneWire(6) // D3
     {
+        }
+
+    void begin()
+    {
         sensor = DallasTemperature(&oneWire);
         sensor.begin();
     }
