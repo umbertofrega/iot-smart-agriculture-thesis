@@ -9,7 +9,7 @@ private:
     DallasTemperature sensor;
 
 public:
-    TemperatureSensor() : oneWire(D3)
+    TemperatureSensor() : oneWire(6) // D3
     {
         sensor = DallasTemperature(&oneWire);
         sensor.begin();
