@@ -46,6 +46,11 @@ public:
     void publishSensors(char *data)
     {
 
-        mqttManager.publish(data);
+        mqttManager.publishSensors(data);
+    }
+
+    void publishMixers(char *data)
+    {
+        mqttManager.publishMixers(data);
     }
 };

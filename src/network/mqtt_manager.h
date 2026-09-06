@@ -44,8 +44,13 @@ public:
         return mqttClient.connected();
     }
 
-    void publish(char *data)
+    void publishSensors(char *data)
     {
-        mqttClient.publish("esp32/updates", data);
+        mqttClient.publish("esp32/updates/sensors", data);
+    }
+
+    void publishMixers(char *data)
+    {
+        mqttClient.publish("esp32/updates/mixers", data);
     }
 };
