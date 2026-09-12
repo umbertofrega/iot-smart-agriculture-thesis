@@ -4,10 +4,12 @@
 #include "sensors/sensors_manager.h"
 #include "network/network_manager.h"
 #include "actuators/mixer_manager.h"
+#include "actuators/sprinkler.h"
 
 NetworkManager networkManager;
 SensorsManager sensorsManager;
 MixersManager mixersManager;
+Sprinkler sprinkler;
 
 const uint64_t TIME_TO_SLEEP_SEC = 60;
 
@@ -71,6 +73,14 @@ void setup()
     {
       data["mixed"] = "didn't mix";
     }
+
+    sprinkler.start();
+    Serial.println("Irrigazione avviata per 5 secondi...");
+
+    delay(5000);
+
+    sprinkler.stop();
+    Serial.println("Irrigazione terminata.");
 
     serializeJson(data, mixersBuffer);
     serializeJsonPretty(data, Serial);
