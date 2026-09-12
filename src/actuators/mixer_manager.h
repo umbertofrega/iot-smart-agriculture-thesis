@@ -6,15 +6,11 @@ class MixersManager
 private:
     Mixer acidicMixer;
     Mixer basicMixer;
-    int pinAcidic;
-    int pinBasic;
+    int pinAcidic = 2;
+    int pinBasic = 1;
 
 public:
-    MixersManager(int pinA, int pinB)
-    {
-        pinAcidic = pinA;
-        pinBasic = pinB;
-    }
+    MixersManager() {}
 
     void mixBasic()
     {

@@ -23,6 +23,7 @@ public:
     {
         float voltage = analogRead(pin) / 4095.0 * 3300.0;
         float phValue = ph.readPH(voltage, temperature);
-        return phValue;
+
+        return (7.0 - (phValue - 7.0));
     }
 };

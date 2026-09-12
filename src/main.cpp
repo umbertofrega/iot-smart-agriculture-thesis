@@ -19,9 +19,9 @@ void setup()
 
   JsonDocument data;
 
-  float temp = sensorsManager.getTemp();
-  float ph = sensorsManager.getPh(temp);
-  float hum = sensorsManager.getHumidityPercentage();
+  float temp = 34;
+  float ph = 5;
+  float hum = 30;
 
   data["ph"] = ph;
   data["temp"] = temp;
@@ -37,7 +37,7 @@ void setup()
 
   data.clear();
 
-  if (hum < 40)
+  if (hum < 30)
   {
     data["irrigation"] = true;
     if (ph > 6.5)
@@ -54,15 +54,11 @@ void setup()
     {
       data["mixed"] = "didn't mix";
     }
-  }
-  else
-  {
-    data["irrigation"] = false;
-  }
 
-  serializeJson(data, mixersBuffer);
+    serializeJson(data, mixersBuffer);
 
-  serializeJsonPretty(data, Serial);
+    serializeJsonPretty(data, Serial);
+  }
 
   if (networkManager.connect())
   {

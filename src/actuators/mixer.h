@@ -6,9 +6,7 @@ private:
     int pinNumber;
 
 public:
-    Mixer()
-    {
-    }
+    Mixer() {}
 
     Mixer(int pin)
     {
