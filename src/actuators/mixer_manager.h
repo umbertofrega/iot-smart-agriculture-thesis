@@ -14,14 +14,14 @@ public:
 
     void mixBasic()
     {
-        acidicMixer = Mixer(pinBasic);
+        basicMixer = Mixer(pinBasic);
         basicMixer.mix();
         Serial.println("Mixed basic");
     }
 
     void mixAcidic()
     {
-        basicMixer = Mixer(pinAcidic);
+        acidicMixer = Mixer(pinAcidic);
         acidicMixer.mix();
         Serial.println("Mixed acidic");
     }
