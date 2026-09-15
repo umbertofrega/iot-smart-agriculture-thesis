@@ -79,9 +79,28 @@ void setup()
 
     sprinkler.start();
     Serial.println("Irrigazione avviata per 5 secondi...");
+
     delay(5000);
+
     sprinkler.stop();
     Serial.println("Irrigazione terminata.");
+
+    serializeJson(data, mixersBuffer);
+    serializeJsonPretty(data, Serial);
+    Serial.println();
+
+    Serial.println("[NETWORK] Connessione WiFi/MQTT in corso...");
+    if (networkManager.connect())
+    {
+      networkManager.publishSensors(sensorsBuffer);
+      networkManager.publishMixers(mixersBuffer);
+      networkManager.disconnect();
+      Serial.println("[NETWORK] Dati inviati. Disconnesso.");
+    }
+    else
+    {
+      Serial.println("[NETWORK] Impossibile connettersi.");
+    }
   }
   else
   {
