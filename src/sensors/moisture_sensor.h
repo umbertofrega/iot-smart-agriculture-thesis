@@ -5,6 +5,6 @@ class MoistureSensor
 public:
     int getHumidityPercentage()
     {
-        return map(analogRead(A1), 3110, 1930, 0, 100);
+        return map(constrain(analogRead(A1), 1900, 3110), 3110, 1900, 0, 100);
     }
 };

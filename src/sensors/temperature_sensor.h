@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-
 class TemperatureSensor
 {
 private:
@@ -9,13 +8,10 @@ private:
     DallasTemperature sensor;
 
 public:
-    TemperatureSensor() : oneWire(6) // D3
-    {
-        }
+    TemperatureSensor() : oneWire(6), sensor(&oneWire) {}
 
     void begin()
     {
-        sensor = DallasTemperature(&oneWire);
         sensor.begin();
     }
 
