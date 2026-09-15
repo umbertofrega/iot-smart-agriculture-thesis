@@ -16,12 +16,12 @@ const uint64_t TIME_TO_SLEEP_SEC = 60;
 void setup()
 {
   Serial.begin(115200);
-  delay(2000);
-
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_RED, OUTPUT);
+  delay(2000);
 
+  // 1. Controllo motivo del risveglio
   esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
   if (cause == ESP_SLEEP_WAKEUP_TIMER)
   {
@@ -32,31 +32,34 @@ void setup()
     Serial.println("\n[SISTEMA] Avvio pulito o Reset.");
   }
 
+  // 2. Acquisizione dati Sensori
   sensorsManager.beginAll();
-
+  int hum = sensorsManager.getHumidityPercentage();
   float temp = sensorsManager.getTemp();
   float ph = sensorsManager.getPh((int)temp);
-  int hum = sensorsManager.getHumidityPercentage();
 
   Serial.printf("Letture -> Temp: %.2fC | pH: %.2f | Hum: %d%%\n", temp, ph, hum);
 
+  // 3. Preparazione e Invio TELEMETRIA (Eseguito SEMPRE)
   JsonDocument data;
   data["ph"] = ph;
   data["temp"] = temp;
   data["humidity"] = hum;
 
   char sensorsBuffer[256];
-  char mixersBuffer[256];
-
   serializeJson(data, sensorsBuffer);
+
+  Serial.println("[TELEMETRIA SENSORI] Pronta per la dashboard:");
   serializeJsonPretty(data, Serial);
   Serial.println();
 
+  // 4. Logica Attuatori e Irrigazione
   data.clear();
+  char mixersBuffer[256];
 
   if (hum < 30)
   {
-    Serial.println("[ATTUATORI] Terreno secco. Calcolo mix...");
+    Serial.println("[ATTUATORI] Terreno secco. Calcolo mix e avvio irrigazione...");
     data["irrigation"] = true;
 
     if (ph > 6.5)
@@ -64,7 +67,7 @@ void setup()
       mixersManager.mixBasic();
       data["mixed"] = "basic";
     }
-    else if (ph < 4)
+    else if (ph < 5.5)
     {
       mixersManager.mixAcidic();
       data["mixed"] = "acid";
@@ -76,38 +79,22 @@ void setup()
 
     sprinkler.start();
     Serial.println("Irrigazione avviata per 5 secondi...");
-
     delay(5000);
-
     sprinkler.stop();
     Serial.println("Irrigazione terminata.");
-
-    serializeJson(data, mixersBuffer);
-    serializeJsonPretty(data, Serial);
-    Serial.println();
-
-    Serial.println("[NETWORK] Connessione WiFi/MQTT in corso...");
-    if (networkManager.connect())
-    {
-      networkManager.publishSensors(sensorsBuffer);
-      networkManager.publishMixers(mixersBuffer);
-      networkManager.disconnect();
-      Serial.println("[NETWORK] Dati inviati. Disconnesso.");
-    }
-    else
-    {
-      Serial.println("[NETWORK] Impossibile connettersi.");
-    }
   }
   else
   {
-    Serial.println("[ATTUATORI] Umidità OK. Salto le pompe e il WiFi.");
+    Serial.println("[ATTUATORI] Terreno umido. Nessuna azione necessaria.");
+    data["irrigation"] = false;
+    data["mixed"] = "none";
   }
 
-  Serial.printf("\n[SISTEMA] Vado in Deep Sleep per %llu secondi...\n", TIME_TO_SLEEP_SEC);
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_SEC * 1000000ULL);
-  Serial.flush();
-  esp_deep_sleep_start();
+  // 5. Preparazione pacchetto Attuatori
+  serializeJson(data, mixersBuffer);
+  Serial.println("[TELEMETRIA ATTUATORI] Pronta per la dashboard:");
+  serializeJsonPretty(data, Serial);
+  Serial.println();
 }
 
 void loop()
