@@ -40,7 +40,7 @@ void setup()
 
   Serial.printf("Letture -> Temp: %.2fC | pH: %.2f | Hum: %d%%\n", temp, ph, hum);
 
-  // 3. Preparazione e Invio TELEMETRIA (Eseguito SEMPRE)
+  // 3. Preparazione e Invio TELEMETRIA SENSORI
   JsonDocument data;
   data["ph"] = ph;
   data["temp"] = temp;
@@ -64,13 +64,13 @@ void setup()
 
     if (ph > 6.5)
     {
-      mixersManager.mixBasic();
-      data["mixed"] = "basic";
+      mixersManager.mixAcidic();
+      data["mixed"] = "acid";
     }
     else if (ph < 5.5)
     {
-      mixersManager.mixAcidic();
-      data["mixed"] = "acid";
+      mixersManager.mixBasic();
+      data["mixed"] = "basic";
     }
     else
     {
@@ -84,23 +84,6 @@ void setup()
 
     sprinkler.stop();
     Serial.println("Irrigazione terminata.");
-
-    serializeJson(data, mixersBuffer);
-    serializeJsonPretty(data, Serial);
-    Serial.println();
-
-    Serial.println("[NETWORK] Connessione WiFi/MQTT in corso...");
-    if (networkManager.connect())
-    {
-      networkManager.publishSensors(sensorsBuffer);
-      networkManager.publishMixers(mixersBuffer);
-      networkManager.disconnect();
-      Serial.println("[NETWORK] Dati inviati. Disconnesso.");
-    }
-    else
-    {
-      Serial.println("[NETWORK] Impossibile connettersi.");
-    }
   }
   else
   {
@@ -109,13 +92,39 @@ void setup()
     data["mixed"] = "none";
   }
 
-  // 5. Preparazione pacchetto Attuatori
+  // 5. Preparazione TELEMETRIA ATTUATORI
   serializeJson(data, mixersBuffer);
-  Serial.println("[TELEMETRIA ATTUATORI] Pronta per la dashboard:");
   serializeJsonPretty(data, Serial);
   Serial.println();
+
+  // 6. Connessione e Trasmissione MQTT
+  Serial.println("[NETWORK] Connessione WiFi/MQTT in corso...");
+  if (networkManager.connect())
+  {
+    networkManager.publishSensors(sensorsBuffer);
+    networkManager.publishMixers(mixersBuffer);
+    networkManager.disconnect();
+    Serial.println("[NETWORK] Dati inviati. Disconnesso.");
+  }
+  else
+  {
+    Serial.println("[NETWORK] Impossibile connettersi.");
+  }
+
+  // 7. Configurazione e avvio Deep Sleep
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_SEC * 1000000ULL);
+
+  Serial.println("[SISTEMA] Vado in Deep Sleep.");
+  Serial.flush();
+
+  // esp_deep_sleep_start();
 }
 
 void loop()
 {
+  int hum = sensorsManager.getHumidityPercentage();
+  float temp = sensorsManager.getTemp();
+  float ph = sensorsManager.getPh((int)temp);
+
+  Serial.printf("Letture -> Temp: %.2fC | pH: %.2f | Hum: %d%%\n", temp, ph, hum);
 }
